@@ -336,10 +336,35 @@
 
         @media (max-width: 768px) {
             h1 { font-size: 3rem; }
+            #hero h1 { font-size: 3rem; }
             h2 { font-size: 2rem; }
+            .tagline { font-size: 1.3rem; }
+
             .workflow { flex-direction: column; }
-            .deployment-grid { grid-template-columns: 1fr; }
+            .workflow-arrow { transform: rotate(90deg); }
+
+            .deployment-grid { grid-template-columns: repeat(2, 1fr); }
+
             .savings-number { font-size: 4rem; }
+
+            .terminal-content { font-size: 0.75rem; padding: 1rem; }
+            .terminal-content pre { white-space: pre; overflow-x: auto; }
+
+            .bar-label { min-width: 80px; font-size: 0.85rem; }
+            .bar-amount { min-width: 80px; font-size: 0.85rem; }
+
+            .opt-table thead { display: none; }
+            .opt-table tr { display: block; border-bottom: 1px solid #30363d; padding: 0.75rem 0; }
+            .opt-table td { display: block; border-bottom: none; padding: 0.25rem 1rem; }
+            .opt-table td:first-child { padding-top: 0.75rem; }
+            .opt-table td:last-child { padding-bottom: 0.75rem; color: #3fb950; font-weight: 600; }
+        }
+
+        @media (max-width: 480px) {
+            #hero h1 { font-size: 2.5rem; }
+            .deployment-grid { grid-template-columns: 1fr; }
+            .bar-label { min-width: 60px; font-size: 0.8rem; }
+            .bar-amount { min-width: 70px; font-size: 0.8rem; }
         }
     </style>
 </head>
