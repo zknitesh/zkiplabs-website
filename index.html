@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Zkip Labs – Cloud Optimization</title>
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg:        #0d1117;
+      --surface:   #161b22;
+      --border:    #30363d;
+      --text:      #c9d1d9;
+      --muted:     #8b949e;
+      --accent:    #58a6ff;
+      --accent-2:  #3fb950;
+      --heading:   #f0f6fc;
+      --card-bg:   #1c2128;
+      --card-hover:#21262d;
+      --tag-bg:    #1f2937;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ── NAV ── */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(13, 17, 23, 0.85);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    nav {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      text-decoration: none;
+      color: var(--heading);
+      font-weight: 700;
+      font-size: 1.15rem;
+      letter-spacing: -0.02em;
+      flex-shrink: 0;
+    }
+
+    .logo-mark {
+      width: 28px;
+      height: 28px;
+      background: linear-gradient(135deg, var(--accent) 0%, var(--accent-2) 100%);
+      border-radius: 7px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      font-weight: 800;
+      color: #0d1117;
+      letter-spacing: -0.05em;
+    }
+
+    .nav-tabs {
+      display: flex;
+      gap: 0.25rem;
+      list-style: none;
+    }
+
+    .nav-tab {
+      position: relative;
+      padding: 0.4rem 0.9rem;
+      border-radius: 6px;
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--muted);
+      cursor: pointer;
+      transition: color 0.15s, background 0.15s;
+      user-select: none;
+    }
+
+    .nav-tab:hover { color: var(--heading); background: var(--surface); }
+
+    .nav-tab.active {
+      color: var(--heading);
+      background: var(--surface);
+    }
+
+    .nav-tab.active::after {
+      content: '';
+      position: absolute;
+      bottom: -1px;
+      left: 0.5rem;
+      right: 0.5rem;
+      height: 2px;
+      background: linear-gradient(90deg, var(--accent), var(--accent-2));
+      border-radius: 2px;
+    }
+
+    .nav-spacer { flex: 1; }
+
+    .nav-cta {
+      padding: 0.4rem 1rem;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      background: var(--accent);
+      color: #0d1117;
+      text-decoration: none;
+      transition: opacity 0.15s;
+      white-space: nowrap;
+    }
+
+    .nav-cta:hover { opacity: 0.85; }
+
+    /* ── PAGES ── */
+    .page { display: none; flex: 1; }
+    .page.active { display: block; }
+
+    /* ── HERO ── */
+    .hero {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 5rem 1.5rem 3rem;
+      text-align: center;
+    }
+
+    .hero-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--accent);
+      border: 1px solid rgba(88, 166, 255, 0.3);
+      border-radius: 100px;
+      padding: 0.3rem 0.9rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .hero-eyebrow span { color: var(--accent-2); }
+
+    .hero h1 {
+      font-size: clamp(2.2rem, 5vw, 3.6rem);
+      font-weight: 800;
+      line-height: 1.1;
+      color: var(--heading);
+      letter-spacing: -0.03em;
+      margin-bottom: 1.25rem;
+    }
+
+    .hero h1 .grad {
+      background: linear-gradient(90deg, var(--accent) 0%, var(--accent-2) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero-sub {
+      max-width: 600px;
+      margin: 0 auto 2.5rem;
+      font-size: 1.05rem;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    /* ── PRODUCTS GRID ── */
+    .section {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 1.5rem 5rem;
+    }
+
+    .section-label {
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 1.5rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 1.25rem;
+    }
+
+    .product-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.75rem;
+      text-decoration: none;
+      color: inherit;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      transition: border-color 0.2s, background 0.2s, transform 0.15s;
+      cursor: pointer;
+    }
+
+    .product-card:hover {
+      border-color: var(--accent);
+      background: var(--card-hover);
+      transform: translateY(-2px);
+    }
+
+    .product-card-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+
+    .product-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, rgba(88,166,255,0.15) 0%, rgba(63,185,80,0.15) 100%);
+      border: 1px solid rgba(88,166,255,0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.3rem;
+      flex-shrink: 0;
+    }
+
+    .product-badge {
+      font-size: 0.7rem;
+      font-weight: 600;
+      padding: 0.2rem 0.6rem;
+      border-radius: 100px;
+      background: rgba(63,185,80,0.15);
+      color: var(--accent-2);
+      border: 1px solid rgba(63,185,80,0.25);
+      white-space: nowrap;
+    }
+
+    .product-card h3 {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--heading);
+      line-height: 1.3;
+    }
+
+    .product-card p {
+      font-size: 0.9rem;
+      color: var(--muted);
+      line-height: 1.65;
+      flex: 1;
+    }
+
+    .product-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+    }
+
+    .tag {
+      font-size: 0.72rem;
+      font-weight: 500;
+      padding: 0.2rem 0.55rem;
+      border-radius: 4px;
+      background: var(--tag-bg);
+      color: var(--muted);
+      border: 1px solid var(--border);
+    }
+
+    .product-cta {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--accent);
+      margin-top: 0.25rem;
+    }
+
+    .product-cta svg { transition: transform 0.15s; }
+    .product-card:hover .product-cta svg { transform: translateX(3px); }
+
+    /* ── ABOUT PAGE ── */
+    .about-hero {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 5rem 1.5rem 3rem;
+    }
+
+    .about-eyebrow {
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1rem;
+    }
+
+    .about-hero h1 {
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 800;
+      color: var(--heading);
+      letter-spacing: -0.03em;
+      line-height: 1.15;
+      margin-bottom: 1.25rem;
+      max-width: 700px;
+    }
+
+    .about-hero h1 .grad {
+      background: linear-gradient(90deg, var(--accent), var(--accent-2));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .about-lead {
+      max-width: 640px;
+      font-size: 1.05rem;
+      color: var(--muted);
+      line-height: 1.75;
+      margin-bottom: 3rem;
+    }
+
+    .about-body {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 1.5rem 5rem;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.25rem;
+    }
+
+    @media (max-width: 680px) {
+      .about-body { grid-template-columns: 1fr; }
+    }
+
+    .about-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.75rem;
+    }
+
+    .about-card-icon {
+      font-size: 1.5rem;
+      margin-bottom: 0.9rem;
+    }
+
+    .about-card h3 {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--heading);
+      margin-bottom: 0.6rem;
+    }
+
+    .about-card p {
+      font-size: 0.88rem;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    .about-full {
+      grid-column: 1 / -1;
+    }
+
+    .stat-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.25rem;
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 1.5rem 3rem;
+    }
+
+    @media (max-width: 580px) {
+      .stat-row { grid-template-columns: 1fr 1fr; }
+    }
+
+    .stat-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.5rem;
+      text-align: center;
+    }
+
+    .stat-card .num {
+      font-size: 2rem;
+      font-weight: 800;
+      color: var(--heading);
+      background: linear-gradient(90deg, var(--accent), var(--accent-2));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      line-height: 1;
+      margin-bottom: 0.4rem;
+    }
+
+    .stat-card .label {
+      font-size: 0.82rem;
+      color: var(--muted);
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      border-top: 1px solid var(--border);
+      background: var(--surface);
+      padding: 1.5rem;
+      text-align: center;
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+
+    footer a { color: var(--muted); text-decoration: none; }
+    footer a:hover { color: var(--accent); }
+
+    /* ── DIVIDER ── */
+    .divider {
+      border: none;
+      border-top: 1px solid var(--border);
+      max-width: 1100px;
+      margin: 0 auto 3rem;
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── HEADER ── -->
+<header>
+  <nav>
+    <a class="logo" href="#" onclick="showPage('products'); return false;">
+      <div class="logo-mark">ZK</div>
+      Zkip Labs
+    </a>
+    <ul class="nav-tabs">
+      <li class="nav-tab active" id="tab-products" onclick="showPage('products')">Products</li>
+      <li class="nav-tab"       id="tab-about"    onclick="showPage('about')">About</li>
+    </ul>
+    <div class="nav-spacer"></div>
+    <a class="nav-cta" href="mailto:hello@zkiplabs.io">Get in touch</a>
+  </nav>
+</header>
+
+<!-- ══════════════════════════════════════════
+     PRODUCTS PAGE
+══════════════════════════════════════════ -->
+<main id="page-products" class="page active">
+
+  <div class="hero">
+    <div class="hero-eyebrow">Cloud Optimization &nbsp;·&nbsp; <span>Save more, scale faster</span></div>
+    <h1>Products built to cut your<br><span class="grad">cloud bill in half</span></h1>
+    <p class="hero-sub">
+      Zkip Labs builds intelligent tooling that identifies waste, surfaces savings,
+      and automates optimization across your cloud infrastructure — so you ship faster
+      without paying more.
+    </p>
+  </div>
+
+  <div class="section">
+    <div class="section-label">Available now</div>
+    <div class="products-grid">
+
+      <!-- TesserixScan product card -->
+      <a class="product-card" href="pitchdeck/index.html">
+        <div class="product-card-header">
+          <div class="product-icon">🔍</div>
+          <span class="product-badge">Early Access</span>
+        </div>
+        <div>
+          <h3>TesserixScan</h3>
+        </div>
+        <p>
+          Deep-scan your AWS environment to uncover hidden storage waste, right-sizing
+          opportunities, and idle resources. Get an actionable savings report in minutes —
+          no agents required.
+        </p>
+        <div class="product-tags">
+          <span class="tag">AWS</span>
+          <span class="tag">S3</span>
+          <span class="tag">EC2</span>
+          <span class="tag">ElastiCache</span>
+          <span class="tag">Cost Intelligence</span>
+        </div>
+        <div class="product-cta">
+          View pitch deck
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M5 12h14M12 5l7 7-7 7"/>
+          </svg>
+        </div>
+      </a>
+
+    </div>
+  </div>
+
+</main>
+
+<!-- ══════════════════════════════════════════
+     ABOUT PAGE
+══════════════════════════════════════════ -->
+<main id="page-about" class="page">
+
+  <div class="about-hero">
+    <div class="about-eyebrow">About Zkip Labs</div>
+    <h1>We make cloud costs<br><span class="grad">work for you</span></h1>
+    <p class="about-lead">
+      Zkip Labs is a cloud services company laser-focused on cost optimization and
+      efficiency. We build products and services that help small businesses and enterprise
+      teams reclaim budget that would otherwise vanish into idle infrastructure.
+    </p>
+  </div>
+
+  <div class="stat-row">
+    <div class="stat-card">
+      <div class="num">40%+</div>
+      <div class="label">Average cloud savings identified</div>
+    </div>
+    <div class="stat-card">
+      <div class="num">&lt; 5 min</div>
+      <div class="label">Time to first savings report</div>
+    </div>
+    <div class="stat-card">
+      <div class="num">0</div>
+      <div class="label">Agents or infra changes needed</div>
+    </div>
+  </div>
+
+  <hr class="divider" />
+
+  <div class="about-body">
+
+    <div class="about-card about-full">
+      <div class="about-card-icon">🏢</div>
+      <h3>Who we are</h3>
+      <p>
+        Zkip Labs was founded to solve a simple but expensive problem: cloud bills that
+        grow faster than value delivered. We are a small, focused engineering team that
+        builds cloud-native tools combining static analysis, live API inspection, and
+        pricing intelligence to give you a clear, honest picture of your cloud spend —
+        and exactly what to do about it.
+      </p>
+    </div>
+
+    <div class="about-card">
+      <div class="about-card-icon">🎯</div>
+      <h3>Our mission</h3>
+      <p>
+        Democratize cloud cost intelligence. Whether you are a three-person startup or a
+        large enterprise, you deserve the same visibility into waste and the same levers
+        to fix it — without hiring a dedicated FinOps team.
+      </p>
+    </div>
+
+    <div class="about-card">
+      <div class="about-card-icon">⚡</div>
+      <h3>How we work</h3>
+      <p>
+        We connect read-only to your cloud accounts, run deep analysis across compute,
+        storage, networking, and managed services, then surface ranked recommendations
+        with dollar-value impact so you always know what to tackle first.
+      </p>
+    </div>
+
+    <div class="about-card">
+      <div class="about-card-icon">🏗️</div>
+      <h3>For small businesses</h3>
+      <p>
+        Cloud costs are the fastest-growing line item for growing teams. Zkip Labs finds
+        the low-hanging fruit — unused snapshots, over-provisioned databases, abandoned
+        data transfers — so you can redirect that budget toward growth.
+      </p>
+    </div>
+
+    <div class="about-card">
+      <div class="about-card-icon">🏭</div>
+      <h3>For enterprises</h3>
+      <p>
+        At scale, even small inefficiencies compound into millions of dollars. Our tooling
+        integrates with your existing CMDB and tagging strategy to deliver
+        portfolio-level savings analysis across accounts, regions, and teams.
+      </p>
+    </div>
+
+    <div class="about-card about-full">
+      <div class="about-card-icon">🔐</div>
+      <h3>Security &amp; trust</h3>
+      <p>
+        We request only read-only IAM permissions and never store raw resource data
+        beyond the analysis session. Your infrastructure stays yours. We operate under a
+        least-privilege principle by default — no agents, no ongoing access unless you
+        explicitly grant it.
+      </p>
+    </div>
+
+  </div>
+
+</main>
+
+<!-- ── FOOTER ── -->
+<footer>
+  &copy; 2026 Zkip Labs &nbsp;·&nbsp;
+  <a href="mailto:hello@zkiplabs.io">hello@zkiplabs.io</a>
+</footer>
+
+<script>
+  function showPage(name) {
+    // update pages
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.getElementById('page-' + name).classList.add('active');
+
+    // update tabs
+    document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+    document.getElementById('tab-' + name).classList.add('active');
+
+    // update URL hash without scrolling
+    history.pushState(null, '', '#' + name);
+
+    window.scrollTo({ top: 0, behavior: 'instant' });
+  }
+
+  // honour direct links (#about, #products) on load
+  (function () {
+    const hash = window.location.hash.replace('#', '');
+    if (hash === 'about' || hash === 'products') showPage(hash);
+  })();
+
+  // back/forward navigation
+  window.addEventListener('popstate', function () {
+    const hash = window.location.hash.replace('#', '');
+    if (hash === 'about' || hash === 'products') showPage(hash);
+    else showPage('products');
+  });
+</script>
+
+</body>
+</html>

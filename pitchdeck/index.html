@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TesserixScan - AWS Storage Intelligence</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif;
+            background-color: #0d1117;
+            color: #c9d1d9;
+            line-height: 1.6;
+            scroll-behavior: smooth;
+        }
+
+        section {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 4rem 2rem;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 4rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        h2 {
+            font-size: 2.5rem;
+            font-weight: 600;
+            margin-bottom: 2rem;
+            color: #f0f6fc;
+        }
+
+        h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #f0f6fc;
+        }
+
+        /* Hero Section */
+        #hero {
+            background: linear-gradient(135deg, #0d1117 0%, #1c2128 50%, #0d1117 100%);
+        }
+
+        #hero h1 {
+            font-size: 5rem;
+            background: linear-gradient(135deg, #58a6ff 0%, #bc8cff 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+        }
+
+        .tagline {
+            font-size: 1.8rem;
+            color: #8b949e;
+            font-weight: 300;
+        }
+
+        /* Problem Section */
+        #problem {
+            max-width: 1000px;
+        }
+
+        .bullet-list {
+            list-style: none;
+            margin-top: 2rem;
+        }
+
+        .bullet-list li {
+            font-size: 1.3rem;
+            margin: 1.5rem 0;
+            padding-left: 2rem;
+            position: relative;
+            color: #8b949e;
+            text-align: left;
+        }
+
+        .bullet-list li:before {
+            content: "→";
+            position: absolute;
+            left: 0;
+            color: #f85149;
+            font-weight: bold;
+        }
+
+        /* How It Works */
+        #how-it-works {
+            max-width: 1200px;
+        }
+
+        .workflow {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .workflow-step {
+            background: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 12px;
+            padding: 2rem;
+            flex: 1;
+            text-align: center;
+        }
+
+        .workflow-step h3 {
+            color: #58a6ff;
+            margin-bottom: 1rem;
+        }
+
+        .workflow-arrow {
+            font-size: 2rem;
+            color: #58a6ff;
+        }
+
+        /* Terminal Output */
+        #terminal {
+            max-width: 1000px;
+            width: 100%;
+        }
+
+        .terminal-window {
+            background: #0d1117;
+            border: 1px solid #30363d;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+        }
+
+        .terminal-header {
+            background: #161b22;
+            padding: 0.75rem 1rem;
+            display: flex;
+            gap: 0.5rem;
+            border-bottom: 1px solid #30363d;
+        }
+
+        .terminal-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .dot-red { background: #f85149; }
+        .dot-yellow { background: #d29922; }
+        .dot-green { background: #3fb950; }
+
+        .terminal-content {
+            padding: 1.5rem;
+            font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            color: #c9d1d9;
+        }
+
+        .terminal-content pre {
+            white-space: pre;
+            overflow-x: auto;
+        }
+
+        /* Cost Breakdown */
+        #cost-breakdown {
+            max-width: 1000px;
+            width: 100%;
+        }
+
+        .bar-chart {
+            margin-top: 3rem;
+            width: 100%;
+        }
+
+        .bar-row {
+            display: flex;
+            align-items: center;
+            margin: 1rem 0;
+            gap: 1rem;
+        }
+
+        .bar-label {
+            min-width: 120px;
+            font-weight: 600;
+            text-align: right;
+        }
+
+        .bar-container {
+            flex: 1;
+            background: #161b22;
+            border-radius: 6px;
+            height: 40px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .bar-fill {
+            height: 100%;
+            border-radius: 6px;
+            transition: width 0.5s ease;
+        }
+
+        .bar-amount {
+            min-width: 120px;
+            font-weight: 600;
+            font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+            text-align: left;
+        }
+
+        /* Optimizations Table */
+        #optimizations {
+            max-width: 1200px;
+            width: 100%;
+        }
+
+        .opt-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 2rem;
+            background: #161b22;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .opt-table th {
+            background: #21262d;
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+            border-bottom: 1px solid #30363d;
+        }
+
+        .opt-table td {
+            padding: 1rem;
+            border-bottom: 1px solid #30363d;
+            text-align: left;
+        }
+
+        .opt-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .badge-high {
+            background: #f85149;
+            color: #ffffff;
+        }
+
+        .badge-medium {
+            background: #d29922;
+            color: #0d1117;
+        }
+
+        .savings-number {
+            font-size: 6rem;
+            font-weight: 700;
+            color: #3fb950;
+            margin: 2rem 0;
+        }
+
+        .savings-subtitle {
+            font-size: 1.3rem;
+            color: #8b949e;
+            max-width: 600px;
+        }
+
+        /* Deployment */
+        #deployment {
+            max-width: 1200px;
+        }
+
+        .deployment-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 1.5rem;
+            margin-top: 3rem;
+        }
+
+        .deployment-card {
+            background: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 12px;
+            padding: 2rem 1.5rem;
+            text-align: center;
+            transition: transform 0.2s, border-color 0.2s;
+        }
+
+        .deployment-card:hover {
+            transform: translateY(-4px);
+            border-color: #58a6ff;
+        }
+
+        .deployment-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .deployment-card h3 {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .deployment-card p {
+            font-size: 0.9rem;
+            color: #8b949e;
+        }
+
+        /* Footer */
+        footer {
+            background: #0d1117;
+            padding: 3rem;
+            text-align: center;
+            color: #8b949e;
+            font-size: 1rem;
+            border-top: 1px solid #21262d;
+        }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 3rem; }
+            h2 { font-size: 2rem; }
+            .workflow { flex-direction: column; }
+            .deployment-grid { grid-template-columns: 1fr; }
+            .savings-number { font-size: 4rem; }
+        }
+    </style>
+</head>
+<body>
+    <section id="hero">
+        <h1>TesserixScan</h1>
+        <p class="tagline">See every byte. Cut every dollar.</p>
+    </section>
+
+    <section id="problem">
+        <h2>The Problem</h2>
+        <h3>AWS costs are invisible until the bill arrives</h3>
+        <ul class="bullet-list">
+            <li>S3 buckets grow silently — no lifecycle rules, wrong storage class</li>
+            <li>Unattached EBS volumes keep billing after instances are terminated</li>
+            <li>No single tool shows storage + cost + optimizations across all services</li>
+        </ul>
+    </section>
+
+    <section id="how-it-works">
+        <h2>How It Works</h2>
+        <div class="workflow">
+            <div class="workflow-step">
+                <h3>1. Configure</h3>
+                <p>Point TesserixScan at your AWS account with read-only credentials</p>
+            </div>
+            <div class="workflow-arrow">→</div>
+            <div class="workflow-step">
+                <h3>2. Scan</h3>
+                <p>Analyze S3, EBS, RDS, DynamoDB, Redshift across all regions</p>
+            </div>
+            <div class="workflow-arrow">→</div>
+            <div class="workflow-step">
+                <h3>3. Optimize</h3>
+                <p>Get actionable recommendations with projected cost savings</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="terminal">
+        <h2>Terminal Output</h2>
+        <div class="terminal-window">
+            <div class="terminal-header">
+                <div class="terminal-dot dot-red"></div>
+                <div class="terminal-dot dot-yellow"></div>
+                <div class="terminal-dot dot-green"></div>
+            </div>
+            <div class="terminal-content">
+<pre>TesserixScan Report — 2026-02-10 14:30:00 UTC
+Scanner v0.1.0 | Schema v1.0.0
+
+Accounts scanned:  1
+Regions scanned:   us-east-1
+Scan duration:     12s
+
+SERVICE        RESOURCES    SIZE        MONTHLY COST
+─────────────────────────────────────────────────────
+DYNAMODB       1 table      2 GB        $536.87
+EBS            2 volumes    600 GB      $58.00
+RDS            1 instance   200 GB      $876.00
+REDSHIFT       1 cluster    450 GB      $2,190.00
+S3             2 buckets    105 GB      $2,567.10
+─────────────────────────────────────────────────────
+TOTAL                                   $6,227.97
+
+TOP OPTIMIZATIONS                           ANNUAL SAVINGS
+───────────────────────────────────────────────────────────
+[HIGH] Add lifecycle policies to la...      $6,161.04
+[HIGH] Delete unattached EBS volumes        $600.00
+[HIGH] Upgrade gp2 volumes to gp3           $120.00
+[HIGH] Enable encryption on S3 buc...       $0.00
+[HIGH] Disable public access on RDS...      $0.00
+[HIGH] Enable encryption on Redshi...       $0.00
+[MED]  Evaluate dc2 to RA3 migration        $0.00
+[MED]  Increase RDS backup retention        $0.00
+───────────────────────────────────────────────────────────
+TOTAL POTENTIAL SAVINGS                     $6,881.04/yr</pre>
+            </div>
+        </div>
+    </section>
+
+    <section id="cost-breakdown">
+        <h2>Monthly Cost by Service</h2>
+        <div class="bar-chart">
+            <div class="bar-row">
+                <div class="bar-label">S3</div>
+                <div class="bar-container">
+                    <div class="bar-fill" style="width: 100%; background: #58a6ff;"></div>
+                </div>
+                <div class="bar-amount">$2,567.10</div>
+            </div>
+            <div class="bar-row">
+                <div class="bar-label">Redshift</div>
+                <div class="bar-container">
+                    <div class="bar-fill" style="width: 85%; background: #bc8cff;"></div>
+                </div>
+                <div class="bar-amount">$2,190.00</div>
+            </div>
+            <div class="bar-row">
+                <div class="bar-label">RDS</div>
+                <div class="bar-container">
+                    <div class="bar-fill" style="width: 34%; background: #3fb950;"></div>
+                </div>
+                <div class="bar-amount">$876.00</div>
+            </div>
+            <div class="bar-row">
+                <div class="bar-label">DynamoDB</div>
+                <div class="bar-container">
+                    <div class="bar-fill" style="width: 21%; background: #d29922;"></div>
+                </div>
+                <div class="bar-amount">$536.87</div>
+            </div>
+            <div class="bar-row">
+                <div class="bar-label">EBS</div>
+                <div class="bar-container">
+                    <div class="bar-fill" style="width: 2.3%; background: #f85149;"></div>
+                </div>
+                <div class="bar-amount">$58.00</div>
+            </div>
+        </div>
+    </section>
+
+    <section id="optimizations">
+        <h2>Optimizations</h2>
+        <table class="opt-table">
+            <thead>
+                <tr>
+                    <th>Severity</th>
+                    <th>Finding</th>
+                    <th>Annual Savings</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><span class="badge badge-high">High</span></td>
+                    <td>Add lifecycle policies to large S3 buckets</td>
+                    <td>$6,161</td>
+                </tr>
+                <tr>
+                    <td><span class="badge badge-high">High</span></td>
+                    <td>Delete unattached EBS volumes</td>
+                    <td>$600</td>
+                </tr>
+                <tr>
+                    <td><span class="badge badge-high">High</span></td>
+                    <td>Upgrade gp2 volumes to gp3</td>
+                    <td>$120</td>
+                </tr>
+                <tr>
+                    <td><span class="badge badge-high">High</span></td>
+                    <td>Enable server-side encryption on S3 buckets</td>
+                    <td>$0</td>
+                </tr>
+                <tr>
+                    <td><span class="badge badge-high">High</span></td>
+                    <td>Disable public accessibility on RDS instances</td>
+                    <td>$0</td>
+                </tr>
+                <tr>
+                    <td><span class="badge badge-high">High</span></td>
+                    <td>Enable encryption on Redshift clusters</td>
+                    <td>$0</td>
+                </tr>
+                <tr>
+                    <td><span class="badge badge-medium">Medium</span></td>
+                    <td>Evaluate migration from dc2 to RA3 node types</td>
+                    <td>$0</td>
+                </tr>
+                <tr>
+                    <td><span class="badge badge-medium">Medium</span></td>
+                    <td>Increase RDS backup retention to at least 7 days</td>
+                    <td>$0</td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+
+    <section id="savings">
+        <div class="savings-number">$6,881/yr</div>
+        <p class="savings-subtitle">in potential annual savings identified in a single 12-second scan</p>
+    </section>
+
+    <section id="deployment">
+        <h2>Deploy Anywhere</h2>
+        <div class="deployment-grid">
+            <div class="deployment-card">
+                <div class="deployment-icon">&gt;_</div>
+                <h3>CloudShell</h3>
+                <p>Run directly in AWS Console</p>
+            </div>
+            <div class="deployment-card">
+                <div class="deployment-icon">$</div>
+                <h3>CLI</h3>
+                <p>Install on any machine</p>
+            </div>
+            <div class="deployment-card">
+                <div class="deployment-icon">◼</div>
+                <h3>Docker</h3>
+                <p>Container-ready image</p>
+            </div>
+            <div class="deployment-card">
+                <div class="deployment-icon">☁</div>
+                <h3>Fargate</h3>
+                <p>Serverless task execution</p>
+            </div>
+            <div class="deployment-card">
+                <div class="deployment-icon">λ</div>
+                <h3>Lambda</h3>
+                <p>Scheduled scanning</p>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>TesserixScan — Open Source AWS Storage Intelligence</p>
+    </footer>
+</body>
+</html>
